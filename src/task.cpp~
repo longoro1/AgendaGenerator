@@ -11,6 +11,4 @@ task::task(string _subject, string _name, int _time, int _partitions,
 	priority = _priority;
 	description = _description;
 	duedate = _duedate;
-	
-	
 }
