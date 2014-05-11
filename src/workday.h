@@ -23,21 +23,22 @@ private:
 	// Amount of time that is spent working (in minutes)
 	int numWorkMin;
 
+	// Max work in minutes that can be done this day
+	int maxworkmin;
+
+	// Maximum number of tasks that can be performed this day
+	int maxtasks;
+
 public: 
 	// Ctor
-	Workday(string _date);
+	Workday(string _date, int _maxwork, int _maxtasks);
 
 	// Accessors
 	string getDate() { return date; }	
 	
-
-	// Member functions --------------------------
-	
 	/* Used to determine how allocated the current workday is
-		_maxMinutes:: max number of minutes for
-			 this particular day of the week
 		RETURNS:: percent allocation (<= 1)*/
-	float getPercentAlloc(const int _maxMinutes);
+	float getPercentAlloc();
 
 	/*Attempts to add a task to this workday
 		t:: pointer to the task to be inserted

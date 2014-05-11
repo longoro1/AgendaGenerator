@@ -1,19 +1,19 @@
 #include "workday.h"
 
 
-Workday::Workday(string _date)
+Workday::Workday(string _date, int _maxwork, int _maxtasks)
 {
 	// Assign the date
-	this -> date = _date;
-
-	// Initialize the number of work minutes
+	date = _date;
+	maxworkmin = _maxwork;
+	maxtasks = _maxtasks;
 
 }
 
 
-float Workday::getPercentAlloc(const int _maxMinutes)
+float Workday::getPercentAlloc()
 {
-	return (float) (numWorkMin / _maxMinutes);
+	return (float) (numWorkMin / maxworkmin);
 }
 
 

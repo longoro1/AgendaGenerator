@@ -4,6 +4,10 @@
 
 using namespace std;
 
+// General constants
+const int HELP = 0;
+const int EXIT = 7;
+
 /*Gets the current date as a string
 	RETURNS:: the current date formatted as day, month, year*/
 string getDate()
@@ -41,6 +45,7 @@ void printheader()
 void printmenu()
 {
 	cout << endl << "What would you like to do?" << endl << endl;
+	cout << "0) Help Me!" << endl;
 	cout << "1) Generate a sample csv file" << endl;
 	cout << "2) Create an Agenda" << endl;
 	cout << "3) Fill an Agenda" << endl;	
@@ -52,9 +57,6 @@ void printmenu()
 
 int shell()
 {
-	// Print the shell header
-	printheader();
-
 	int menuchoice; // What menu item was chosen
 
 	do{
@@ -64,16 +66,21 @@ int shell()
 		cin >> menuchoice;
 		
 		// Input failed
-		if(cin.fail())
+		if (cin.fail())
 		{
 			cerr << endl << "Invalid option. Please input a number!" 
 				<< endl;
 			cin.clear();
 			cin.ignore(1000, '\n');
 		}
+		
+		// Input not in menu range
+		if (menuchoice > EXIT || menuchoice < HELP)
+			cerr << endl << "Please select a number between "
+				<< "0 and 7." << endl;
 
 
-	} while(menuchoice > 7 || menuchoice < 1);
+	} while (menuchoice > EXIT || menuchoice < HELP);
 
 	return menuchoice;
 }
@@ -88,9 +95,51 @@ int main (int numarg, char *arg[])
 		return 0;
 	}*/
 
-	shell();
-	
+	// Print the shell header
+	printheader();
+
+
+	int menuchoice;
+
+	// Keep processing input until exit
+	do{
+		menuchoice = shell();
+
+
+
+
+	} while (menuchoice != EXIT);
+		
+
+	cout << endl << "Terminating Application!" << endl;
 
 	return 0;	
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

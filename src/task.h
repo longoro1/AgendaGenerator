@@ -31,8 +31,6 @@ private:
 	// Description of the task. Can potentially be empty
 	string description;
 
-
-	// Member functions ---------------------------	
 	// A copy ctor with a newTaskTime specification
 	task(const task &_t, const int _newTaskTime);
 
@@ -44,9 +42,6 @@ public:
 	// Accessors
 	int getTime() { return time; }
 
-	// Mutators
-
-	// Member functions
 	/*Partitions a task to divide the load
 		_newTaskTime:: amount of time to allocate to the new task
 		RETURNS:: pointer to a new task class, 
