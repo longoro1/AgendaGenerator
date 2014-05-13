@@ -2,117 +2,177 @@
 #include <sstream>
 #include <ctime>
 
+#include "agenda.h"
+#include "fileparser.h"
+#include "shell.h"
+
 using namespace std;
 
-// General constants
-const int HELP = 0;
-const int EXIT = 7;
+// Global variables
+int *maxworkmin;
+int *maxtasks;
 
-/*Gets the current date as a string
-	RETURNS:: the current date formatted as day, month, year*/
-string getDate()
+// Agenda
+Agenda *agenda = NULL;
+
+/* Generates a file that the user can fill in*/
+void generateFile()
 {
-	stringstream ss;
+	ofstream out("sample.csv");
+	out << "work,time,deadline,priority,partitions,details" << endl;
+	out.close();
 
-	// Get the time
-	time_t now = time(0);
-	tm *ltm = localtime(&now);
-
-	// Store the time
-	ss << ((ltm -> tm_year) + 1900) << "." 
-		<< ltm -> tm_mon << "."
-		<< (ltm -> tm_mday + 1) << endl;
-
-	// Finsh
-	return ss.str();
+	cout << "File \"sample.csv\" created in local directory" << endl;
 }
 
-void printheader()
+/* Guides the user through the process of creating a new agenda*/
+void makeAgenda()
 {
-	cout << "###################################################" << endl;
-	cout << "###################################################" << endl;
-	cout << "#                                                 #" << endl;
-	cout << "#                 AGENDA GENERATOR                #" << endl;
-	cout << "#                      v 1.0                      #" << endl;
-	cout << "#                                                 #" << endl;
-	cout << "#               BY:: HACKBIT STUDIOS              #" << endl;
-	cout << "#                                                 #" << endl;
-	cout << "###################################################" << endl;
-	cout << "###################################################" << endl;
-	cout << endl;
+	// Desired name of the agenda
+	string agendaname;
+
+	// Make sure that no agenda currently exists
+	if (agenda != NULL)
+	{
+		cout << "An agenda exists already." << endl
+			<< "Please delete it first!" << endl;
+
+		return;
+	}
+
+	// Get the desired agenda name
+	cout << "What would you like to call the agenda (1 word only)?" << endl;
+	cin >> agendaname;
+	cin.ignore(1000, '\n');
+
+	// Create the agenda
+	agenda = new Agenda(agendaname, maxworkmin, maxtasks);
+
+	// Confirm with user
+	cout << "Agenda " << agendaname << " created" << endl;
 }
 
-void printmenu()
+/* Populates an agenda with entries */
+void fillAgenda()
 {
-	cout << endl << "What would you like to do?" << endl << endl;
-	cout << "0) Help Me!" << endl;
-	cout << "1) Generate a sample csv file" << endl;
-	cout << "2) Create an Agenda" << endl;
-	cout << "3) Fill an Agenda" << endl;	
-	cout << "4) Print out an Agenda" << endl;
-	cout << "5) Save an agenda to disk" << endl;
-	cout << "6) Load an agenda from disk" << endl;
-	cout << "7) Exit Application" << endl;
+	// Quit if agenda is empty
+	if (agenda == NULL)
+	{
+		cout << "No agenda exists!" << endl;
+		return;
+	}
+
+	int maxFiles = 8; // How many files can be handled
+	int numFiles = 0; // Counter for the number of filenames scanned
+	string filename[10]; // The names of the file
+	string subject[10]; // The names of the subject
+	// thread *t[MAX_FILES]; // Each file gets its own thread
+
+	// Prompt the user for the file names
+	std::cout << "Please enter up to " << maxFiles << " files in format: subject filename\n";
+
+	getline(cin, filename[0]); // Skip description line
+	stringstream ss(filename[0]);
+
+	// Read files and launch threads
+	while(!ss.eof() && numFiles < maxFiles)
+	{
+		ss >>  subject[numFiles] >> filename[numFiles];
+		string s1 = filename[numFiles];
+		string s2 = subject[numFiles];
+		//t[numFiles] = new thread([s1, s2, numFiles]{
+			readFile(s1, s2, numFiles, agenda);
+		//});
+
+		numFiles++;
+	}
+
+	// Join all threads
+	/*for(int i = 0; i < numFiles; i++) 
+		if(t[i] -> joinable()) t[i] -> join(); // Join on the threads
+		*/
 }
 
-int shell()
+/* Deletes the agenda */
+void deleteAgenda()
 {
-	int menuchoice; // What menu item was chosen
+	// Nothing to delete
+	if (agenda == NULL)
+	{
+		cout << "No agenda to delete!" << endl;
+		return;
+	}
 
-	do{
-		// Print the menu and get an item
-		printmenu();
-		cout << "> ";
-		cin >> menuchoice;
-		
-		// Input failed
-		if (cin.fail())
-		{
-			cerr << endl << "Invalid option. Please input a number!" 
-				<< endl;
-			cin.clear();
-			cin.ignore(1000, '\n');
-		}
-		
-		// Input not in menu range
-		if (menuchoice > EXIT || menuchoice < HELP)
-			cerr << endl << "Please select a number between "
-				<< "0 and 7." << endl;
-
-
-	} while (menuchoice > EXIT || menuchoice < HELP);
-
-	return menuchoice;
+	// Delete agenda
+	cout << "Deleting agenda " << agenda -> getName() << endl;
+	delete agenda;
+	agenda = NULL;
 }
 
 int main (int numarg, char *arg[])
 {
-	// Improper number of config file parameters
-	/*if(numarg != 2)
-	{
-		cerr << "Configuration file not specified. Terminating program."
-			 << endl;
-		return 0;
-	}*/
+	string filename (arg[1]); // Name of the config file
+	int menuchoice; // What menu option was selected
 
 	// Print the shell header
 	printheader();
 
+	// Improper number of config file parameters
+	if(numarg != 2)
+	{
+		cerr << "Configuration file not specified. Terminating program."
+			 << endl;
+		return 0;
+	}
 
-	int menuchoice;
+	
+	// Process the config file
+	int err = parseConfigFile (filename, maxworkmin, maxtasks);
+	if (err != 0)
+	{
+		cout << "Error with configuration file" << endl;
+		return 0;
+	}
+	cout << "conf File processed Correctly" << endl << endl;
+
 
 	// Keep processing input until exit
 	do{
 		menuchoice = shell();
 
+		switch (menuchoice)
+		{
+			case HELP: // Help
+			printhelp();
+			break;
 
+			case 1: // Sample file
+			generateFile();
+			break;
 
+			case 2: // New Agenda
+			makeAgenda();
+			break;
+
+			case 3: // Fill Agenda
+			fillAgenda();
+			break;
+
+			case 7: // Delete Agenda
+			deleteAgenda();
+			break;
+
+			case EXIT:
+			cout << endl << "Terminating Application!" << endl;
+			break;
+
+			default:
+			cout << "Not yet implemented" << endl;
+			break;
+		}
 
 	} while (menuchoice != EXIT);
 		
-
-	cout << endl << "Terminating Application!" << endl;
-
 	return 0;	
 
 }

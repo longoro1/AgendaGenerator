@@ -2,12 +2,23 @@
 #define _FILEPARSER_H
 
 #include <string>
+#include <fstream>
+#include <iostream>
 #include <sstream>
 
+#include "agenda.h"
+#include "workday.h"
 #include "task.h"
-
 using namespace std;
 
+
+
+/* Processes a given config file. ARRAYS ARE UNALLOCATED BEFORE FUNCTION!!
+	_filename:: name of the file
+	_maxworkmin:: array of how many minutes are avaliable for use each day
+	_maxtasks:: the maximum number of tasks allowed in a day
+	RETURNS:: -1 if error, 0 if succeeded*/
+int parseConfigFile(string _filename, int *&_maxworkmin, int *&_maxtasks);
 
 /* Genearates a task using a given line from a file
 	_subject:: subject associated with that file	
@@ -26,5 +37,17 @@ int getDayofWeek (string _date);
 	RETURNS:: the new date*/
 string shiftDate(const string _date, const int _numDays);
 
+/*Gets the current date as a string
+	RETURNS:: the current date formatted as day, month, year*/
+string getDate();
+
+/* Reads out a file and parses it line by line
+	Assumes formatting: "work,time,deadline,priority,partitions,details"
+	filename:: the name of the file to be parsed 
+	subject:: the subject associated with the file
+	index:: the index associated with the given file
+	agenda:: Pointer to the agenda class*/	
+void readFile(const string _filename, const string _subject, 
+	const int _index, Agenda *_agenda);
 
 #endif

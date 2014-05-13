@@ -41,6 +41,7 @@ public:
 
 	// Accessors
 	int getTime() { return time; }
+	string getDate() { return duedate; }
 
 	/*Partitions a task to divide the load
 		_newTaskTime:: amount of time to allocate to the new task
