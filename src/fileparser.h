@@ -20,7 +20,7 @@ int parseConfigFile(string _filename, int *&_maxworkmin, int *&_maxtasks);
 	_subject:: subject associated with that file	
 	_fileline:: one line of text in the file
 	RETURNS:: pointer to a task*/
-task &generateTask(string _subject, string _fileline);
+task *generateTask(string _subject, string _fileline);
 
 /* Gets the number for the day of the week in accordance with ctime
 	_date:: the string for the date

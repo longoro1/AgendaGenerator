@@ -41,3 +41,27 @@ task *task::partition(int _newTaskTime)
 	
 }
 
+ostream &operator<<(ostream &os, const task &t)
+{
+	// Print off the task
+	os << "[ ] " << t.subject << " - " << t.name << endl
+		<< "\tPRIORITY '";
+	
+	if (t.priority > 0) os << t.priority;
+	else os << "IMMEDIATE";
+
+	os << "'\tDUE DATE " 
+		<< t.duedate << endl		
+		<< "\tTIME " << t.time << " min";
+	if (t.remainingPartitions > 1 && t.priority > 0)
+		os << "\tPARTITIONS " << t.remainingPartitions;
+	os << endl;
+
+	if(!t.description.empty())
+		os << '\t' << t.description << endl;
+
+	os << endl;
+
+	return os;
+}
+

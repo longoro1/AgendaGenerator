@@ -12,6 +12,14 @@ Agenda::~Agenda()
 	// Implement me!!
 }
 
+void Agenda::plotTask (task *_t)
+{
+
+	Workday *w = getDay(_t -> getDate(), true);
+	w -> plottask(_t);
+
+}
+
 
 Workday *Agenda::createDay(string _date, workdayiterator _posn)
 {
@@ -65,11 +73,14 @@ Workday *Agenda::getDay(string _date, bool _canAdd)
 
 ostream &operator<<(ostream &os, Agenda &a)
 {
-	// Print the header
+	// Print the heade
+	os << "****************************************************************";
+	os << endl;
 	os << a.name << endl;
-
 	os << "First Day of Work:: " << a.minday << endl;
 	os << "Last Day of Work:: " << a.maxday << endl;
+	os << "****************************************************************";
+	os << endl << endl;
 
 	// Print off the workdays
 	workdayiterator i_begin = a.begin();
@@ -77,7 +88,9 @@ ostream &operator<<(ostream &os, Agenda &a)
 
 	while (i_begin != i_end)
 	{
-		os << *(*i_begin) << endl;
+		os << "///////////////////////////////////////////////////////";
+		os << endl;
+		os << *(*i_begin);// << endl;
 		i_begin++;
 	}
 

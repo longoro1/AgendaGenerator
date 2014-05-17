@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <ostream>
+#include <iterator>
+#include <cmath>
 
 #include "task.h"
 
@@ -11,6 +13,9 @@ using namespace std;
 
 // Redefine a vector of tasks as a task list
 typedef vector <task *> tasklist;
+
+/* Define an iterator for the takslist*/
+typedef tasklist::iterator taskiterator;
 
 class Workday {
 
@@ -35,7 +40,9 @@ public:
 	Workday(string _date, int _maxwork, int _maxtasks);
 
 	// Accessors
-	string getDate() const { return date; }	
+	string getDate() const { return date; }
+	taskiterator begin() { return tasks.begin(); }
+	taskiterator end() { return tasks.end(); }
 	
 	/* Used to determine how allocated the current workday is
 		RETURNS:: percent allocation (<= 1)*/
@@ -47,11 +54,11 @@ public:
 	tasklist plottask(task *_t);
 	
 	// Printer
-	friend ostream& operator<<(ostream& os, const Workday &w);
+	friend ostream& operator<<(ostream& os, Workday &w);
 
 };
 
-ostream &operator<<(ostream &os, const Workday &w);
+ostream &operator<<(ostream &os, Workday &w);
 
 
 #endif

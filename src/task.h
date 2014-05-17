@@ -51,11 +51,11 @@ public:
 	task *partition(int _newTaskTime);
 	
 	// Printer
-	//friend ostream& operator<<(ostream& os, const Agenda &a);
+	friend ostream& operator<<(ostream& os, const task &t);
 
 };
 
-//ostream &operator<<(ostream &os, const Agenda &a);
+ostream &operator<<(ostream &os, const task &t);
 
 
 #endif

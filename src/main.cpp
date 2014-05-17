@@ -58,10 +58,11 @@ void readFile(const string _filename, const string _subject,
 		if(!base.empty()) // Line must be non-empty
 		{
 			// Allocate a new daily task
-			task t = generateTask(_subject, base); // Make new task
-			Workday *w = _agenda -> getDay(t.getDate(), true);
-			w -> plottask(&t);
-			
+			task *t = generateTask(_subject, base); // Make new task
+			//Workday *w = _agenda -> getDay(t -> getDate(), true);
+			//w -> plottask(t);
+			_agenda -> plotTask(t);
+
 			i++; // Increase counter
 		}
 	}

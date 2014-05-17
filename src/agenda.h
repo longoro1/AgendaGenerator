@@ -59,6 +59,10 @@ public:
 		RETURNS:: pointer to the workday (or NULL)*/
 	Workday *getDay(string _date, bool _canAdd);
 
+	/* Attempts to plot the task in the workday list
+		_t:: the task to plot*/
+	void plotTask (task *_t);
+
 	// Printer
 	friend ostream& operator<<(ostream& os, Agenda &a);
 

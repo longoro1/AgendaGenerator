@@ -1,6 +1,6 @@
 #include "fileparser.h"
 
-task &generateTask(string _subject, string _fileline)
+task *generateTask(string _subject, string _fileline)
 {
 	// Necessary fields
 	string name, duedate, description;
@@ -22,7 +22,8 @@ task &generateTask(string _subject, string _fileline)
 	// Create and return the object;
 	task *t = new task(_subject, name, time, partitions, 
 		duedate, priority, description);
-	return *t;
+
+	return t;
 }
 
 
