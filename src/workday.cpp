@@ -11,7 +11,7 @@ Workday::Workday(string _date, int _maxwork, int _maxtasks)
 }
 
 
-float Workday::getPercentAlloc()
+float Workday::getPercentAlloc() const
 {
 	return (float) (numWorkMin / maxworkmin);
 }
@@ -28,4 +28,12 @@ tasklist Workday::plottask(task *_t)
 	tasks.push_back(_t);
 	
 	return toReplot;
+}
+
+ostream &operator<<(ostream &os, const Workday &w)
+{
+	os << "DAY " << w.date << endl;
+	os << "Percent Allocation = " << w.getPercentAlloc() << "%" << endl;
+	
+	return os; 
 }

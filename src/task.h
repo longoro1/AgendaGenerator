@@ -2,6 +2,7 @@
 #define _TASK_H
 
 #include <string>
+#include <ostream>
 
 using namespace std;
 
@@ -40,15 +41,21 @@ public:
 		string _duedate, int _priority, string _description);
 
 	// Accessors
-	int getTime() { return time; }
-	string getDate() { return duedate; }
+	int getTime() const { return time; }
+	string getDate() const { return duedate; }
 
 	/*Partitions a task to divide the load
 		_newTaskTime:: amount of time to allocate to the new task
 		RETURNS:: pointer to a new task class, 
 			or null if an error occured*/
 	task *partition(int _newTaskTime);
+	
+	// Printer
+	//friend ostream& operator<<(ostream& os, const Agenda &a);
+
 };
+
+//ostream &operator<<(ostream &os, const Agenda &a);
 
 
 #endif

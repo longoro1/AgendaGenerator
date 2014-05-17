@@ -6,12 +6,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "agenda.h"
-#include "workday.h"
 #include "task.h"
 using namespace std;
-
-
 
 /* Processes a given config file. ARRAYS ARE UNALLOCATED BEFORE FUNCTION!!
 	_filename:: name of the file
@@ -41,13 +37,6 @@ string shiftDate(const string _date, const int _numDays);
 	RETURNS:: the current date formatted as day, month, year*/
 string getDate();
 
-/* Reads out a file and parses it line by line
-	Assumes formatting: "work,time,deadline,priority,partitions,details"
-	filename:: the name of the file to be parsed 
-	subject:: the subject associated with the file
-	index:: the index associated with the given file
-	agenda:: Pointer to the agenda class*/	
-void readFile(const string _filename, const string _subject, 
-	const int _index, Agenda *_agenda);
+
 
 #endif

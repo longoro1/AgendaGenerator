@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <ostream>
 
 #include "task.h"
 
@@ -34,18 +35,23 @@ public:
 	Workday(string _date, int _maxwork, int _maxtasks);
 
 	// Accessors
-	string getDate() { return date; }	
+	string getDate() const { return date; }	
 	
 	/* Used to determine how allocated the current workday is
 		RETURNS:: percent allocation (<= 1)*/
-	float getPercentAlloc();
+	float getPercentAlloc() const;
 
 	/*Attempts to add a task to this workday
 		t:: pointer to the task to be inserted
 		RETURNS:: a list of tasks that need to be relocated*/
 	tasklist plottask(task *_t);
 	
+	// Printer
+	friend ostream& operator<<(ostream& os, const Workday &w);
+
 };
+
+ostream &operator<<(ostream &os, const Workday &w);
 
 
 #endif

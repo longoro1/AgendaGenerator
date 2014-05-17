@@ -2,8 +2,8 @@
 #include <sstream>
 #include <ctime>
 
-#include "agenda.h"
 #include "fileparser.h"
+#include "agenda.h"
 #include "shell.h"
 
 using namespace std;
@@ -14,6 +14,68 @@ int *maxtasks;
 
 // Agenda
 Agenda *agenda = NULL;
+
+/* Reads out a file and parses it line by line
+	Assumes formatting: "work,time,deadline,priority,partitions,details"
+	filename:: the name of the file to be parsed 
+	subject:: the subject associated with the file
+	index:: the index associated with the given file
+	agenda:: Pointer to the agenda class*/	
+void readFile(const string _filename, const string _subject, 
+	const int _index, Agenda *_agenda)
+{
+	ifstream file;
+	file.open(_filename);
+	string base;
+	int maxtasks = 100;
+	string sformat = "work,time,deadline,priority,partitions,details";
+
+	int i = 0; // Counter
+
+	// Make sure file opened correctly
+	if(file == NULL)
+	{
+		std::cout << "Failed to open '" << _filename << "'\n";
+		return;
+	}
+
+	getline(file, base); // Skip first line
+
+	// File does not follow given specs
+	if(base != sformat)
+	{
+		cout << "ERR Invalid File: \"" 
+			<< _filename << "\"" << std::endl ;
+		return;
+	}
+
+	// Read until end of file
+	while(!file.eof() && i < maxtasks)
+	{
+		getline(file, base);
+	
+		// Allocate non-empty strings
+		if(!base.empty()) // Line must be non-empty
+		{
+			// Allocate a new daily task
+			task t = generateTask(_subject, base); // Make new task
+			Workday *w = _agenda -> getDay(t.getDate(), true);
+			w -> plottask(&t);
+			
+			i++; // Increase counter
+		}
+	}
+
+
+	file.close();
+
+	// Finally, print result
+	std::cout << "Scanned " << i << " items from '" << _filename << "'\n";
+
+	return;
+
+	//return tasks;
+}
 
 /* Generates a file that the user can fill in*/
 void generateFile()
@@ -71,6 +133,7 @@ void fillAgenda()
 	// Prompt the user for the file names
 	std::cout << "Please enter up to " << maxFiles << " files in format: subject filename\n";
 
+	cin.ignore(1000, '\n');
 	getline(cin, filename[0]); // Skip description line
 	stringstream ss(filename[0]);
 
@@ -107,6 +170,20 @@ void deleteAgenda()
 	cout << "Deleting agenda " << agenda -> getName() << endl;
 	delete agenda;
 	agenda = NULL;
+}
+
+/* Prints an agenda */
+void printAgenda()
+{
+	// Nothing to delete
+	if (agenda == NULL)
+	{
+		cout << "No agenda to print!" << endl;
+		return;
+	}
+
+	// Delete agenda
+	cout << *agenda;
 }
 
 int main (int numarg, char *arg[])
@@ -157,6 +234,10 @@ int main (int numarg, char *arg[])
 			case 3: // Fill Agenda
 			fillAgenda();
 			break;
+			
+			case 4: // Print Agenda
+			printAgenda();
+			break;
 
 			case 7: // Delete Agenda
 			deleteAgenda();
@@ -172,6 +253,9 @@ int main (int numarg, char *arg[])
 		}
 
 	} while (menuchoice != EXIT);
+
+	// Delete the agenda
+	if (agenda != NULL) delete agenda;
 		
 	return 0;	
 

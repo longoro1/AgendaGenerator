@@ -1,20 +1,30 @@
 #include "fileparser.h"
 
+task &generateTask(string _subject, string _fileline)
+{
+	// Necessary fields
+	string name, duedate, description;
+	int time, partitions, priority;
 
-/*
-// Assign the other parameters
-		string temp;
-		istringstream ss(scan);
-		getline(ss, key, ',');
-		getline(ss, temp, ',');
-		time = stoi(temp);
-		getline(ss, deadline, ',');
-		getline(ss, temp, ',');
-		priority = stoi(temp);
-		getline(ss, temp, ',');
-		numPartitions = stoi(temp);
-		getline(ss, details, ',');
-*/
+	// Scan in the fields
+	string temp;
+	istringstream ss(_fileline);
+	getline(ss, name, ',');
+	getline(ss, temp, ',');
+	time = stoi(temp);
+	getline(ss, duedate, ',');
+	getline(ss, temp, ',');
+	priority = stoi(temp);
+	getline(ss, temp, ',');
+	partitions = stoi(temp);
+	getline(ss, description, ',');
+
+	// Create and return the object;
+	task *t = new task(_subject, name, time, partitions, 
+		duedate, priority, description);
+	return *t;
+}
+
 
 string getDate()
 {
@@ -122,59 +132,5 @@ string shiftDate(const string _date, const int _numDays)
 
 }
 
-void readFile(const string _filename, const string _subject, 
-	const int _index, Agenda *_agenda)
-{
-	ifstream file;
-	file.open(_filename);
-	string base;
-	int maxtasks = 100;
-	string sformat = "work,time,deadline,priority,partitions,details";
 
-	int i = 0; // Counter
-
-	// Make sure file opened correctly
-	if(file == NULL)
-	{
-		std::cout << "Failed to open '" << _filename << "'\n";
-		return;
-	}
-
-	getline(file, base); // Skip first line
-
-	// File does not follow given specs
-	if(base != sformat)
-	{
-		cout << "ERR Invalid File: \"" 
-			<< _filename << "\"" << std::endl ;
-		return;
-	}
-
-	// Read until end of file
-	while(!file.eof() && i < maxtasks)
-	{
-		getline(file, base);
-	
-		// Allocate non-empty strings
-		if(!base.empty()) // Line must be non-empty
-		{
-			// Allocate a new daily task
-			task t = generateTask(_subject, base); // Make new task
-			Workday *w = _agenda -> getDay(t.getDate());
-			w -> plottask(&t);
-			
-			i++; // Increase counter
-		}
-	}
-
-
-	file.close();
-
-	// Finally, print result
-	std::cout << "Scanned " << i << " items from '" << _filename << "'\n";
-
-	return;
-
-	//return tasks;
-}
 
