@@ -10,6 +10,5 @@ using namespace std;
 
 /* All of the following functions log to a file*/
 void LOG (string ss);
-void LOG (stringstream ss);
 
 #endif

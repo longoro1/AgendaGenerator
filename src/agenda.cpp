@@ -15,10 +15,9 @@ Agenda::~Agenda()
 void Agenda::plot_task (task *_t)
 {
 	// LOG
-	string log;
-	log = "Agenda::plot_task(";
-	log += ")";;// << *_t << ")";
-	LOG (log);
+	stringstream ss;
+	ss << "Agenda::plot_task(" << *_t << ")";
+	LOG (ss.str());
 
 	Workday *w = getDay(_t -> getDate(), true);
 	w -> plottask(_t);

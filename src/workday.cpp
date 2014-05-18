@@ -16,24 +16,40 @@ float Workday::getPercentAlloc() const
 	return ((float)numWorkMin / (float)maxworkmin);
 }
 
-
 tasklist *Workday::plottask(task *_t)
 {
 	tasklist *bumpedtasks = NULL; // List that will be returned
 
-
+	// LOG
+	stringstream ss;
+	ss << "Workday::plot_task(" << *_t << ")";
+	LOG (ss.str());
+	
 	// See if time is violated
 	if ( (_t -> getTime() + numWorkMin) > maxworkmin )
-	{
+	{	
 		bumpedtasks = bump (_t); // Bump
 
-		/*if (bumpedtasks == NULL) // Couldn't bump
+		if (bumpedtasks == NULL) // Couldn't bump
 		{
 			// Just shove this task into a list, and return it
 			bumpedtasks = new tasklist();
 			bumpedtasks -> push_back ( _t);
 			return bumpedtasks;
-		}*/ return NULL;
+		}
+
+		// Check if are actually able to insert the task
+		if ( (_t -> getTime() + numWorkMin) > maxworkmin ) // Not able
+		{
+			for (int i = 0; i < bumpedtasks -> size(); i++)
+			{
+				tasks.push_back((*bumpedtasks)[i]);
+				numWorkMin += ((*bumpedtasks)[i]) -> getTime();
+				delete bumpedtasks;
+				return NULL;
+			}			
+
+		}
 	}
 
 	// At this point, guarenteed that there is room for the task, so add it
@@ -45,6 +61,11 @@ tasklist *Workday::plottask(task *_t)
 
 tasklist *Workday::bump(task *t)
 {
+	// LOG
+	stringstream ss;
+	ss << "Workday::bump(" << *t << ")";
+	LOG (ss.str());
+
 	// A list of tasks
 	tasklist *tlist = new tasklist;
 
@@ -54,35 +75,47 @@ tasklist *Workday::bump(task *t)
 	// Will not bump low-priority items
 	if (priority == task::MIN_PRIORITY) return NULL;
 	
-	int posn = 0; // Where we left off in the tasklist
-	
-	// Tasklist iterators
-	taskiterator i_begin = begin();
-	taskiterator i_end = end();
-
 	/* Iterate through the list and find lower priority tasks
 	found::
 		1) add pointer to new list
 		2) using the iterator, remove the task from the list
-		3) put iterator back at old posn
+			A) if got necessary time, exit
+		3) realign iterators
 		4) recurse*/
-	while (i_begin != i_end)
+
+	for (int i = task::MIN_PRIORITY; i > priority; i--)
 	{
-		// Steps 1 and 2
-		if ( (*i_begin) -> getPriority() > priority)
+	
+		// Tasklist iterators
+		taskiterator i_begin = begin();
+		taskiterator i_end = end();
+
+		while (i_begin != i_end)
 		{
-			tlist -> push_back (*i_begin); // Add to list
-			tasks.erase(i_begin); // Remove the task from list
+			// Steps 1 and 2
+			if ( (*i_begin) -> getPriority()  == i)
+			{
+				tlist -> push_back (*i_begin); // Add to list
+				numWorkMin -= 
+					(*i_begin) -> getTime(); // Adjust time
+				tasks.erase(i_begin); // Remove task from list
 
-			// Realign pointer
-			i_begin = begin();
-			i_end = end();
-			//advance (i_begin, posn); // #efficency
+				// Realign pointer
+				i_begin = begin();
+				i_end = end();
+
+				// Check if have sufficent time gain
+				if ( (t -> getTime() + numWorkMin) <= maxworkmin )
+					return tlist;
+
+			}
+			else
+			{
+				// Increase positions
+				++i_begin;
+			}
+			
 		}
-
-		// Increase positions
-		++i_begin;
-		++posn;
 	}
 
 	// Nothing found, cleanup

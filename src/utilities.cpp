@@ -1,7 +1,7 @@
 #include "utilities.h"
 
 string logfilename = "log.txt";
-const bool canLOG = true;
+const bool canLOG = false;
 
 void LOG (string ss)
 {
@@ -27,10 +27,4 @@ void LOG (string ss)
 		f << ss2.str() << ss <<endl;
 		f.close();
 	}
-}
-
-
-void LOG (stringstream ss)
-{
-	LOG (ss.str());
 }
