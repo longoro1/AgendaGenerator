@@ -36,7 +36,7 @@ string getDate()
 	tm *ltm = localtime(&now);
 
 	// Store the time
-	ss << ((ltm -> tm_year) + 1900) << "." 
+	ss << ((ltm -> tm_year) + 1900 - 2000) << "." 
 		<< ltm -> tm_mon << "."
 		<< (ltm -> tm_mday + 1) << endl;
 
@@ -110,23 +110,27 @@ string shiftDate(const string _date, const int _numDays)
 {
 	int day, month, year;
 
-	sscanf(_date.c_str(), "%d.%d.%d", &month, &day, &year);
+	sscanf(_date.c_str(), "%d.%d.%d", &year, &month, &day);
+	day--;
 
-	// Create a time struct
+	/*// Create a time struct
 	struct tm t;
-	t.tm_year = year - 1900;
+	t.tm_year = year - 1900 + 2000;
 	t.tm_mon = month - 1;
 	t.tm_mday = day;
 
 	// Offset the number of days
 	t.tm_mday += _numDays;
-	mktime(&t);
+	time_t next = mktime(&t);
+
+	// Output the new days
+	year = t.tm_year + 1900;
+	month = t.tm_mon + 1;
+	day = t.tm_mday;*/
 
 	// Store the new day
 	stringstream ss;
-	ss << ((t.tm_year) + 1900) << "." 
-		<< t.tm_mon << "."
-		<< (t.tm_mday + 1) << endl;
+	ss << year << "." << month << "." << day << endl;
 
 	// Return the result
 	return ss.str();

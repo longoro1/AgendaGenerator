@@ -22,7 +22,7 @@ tasklist *Workday::plottask(task *_t)
 
 	// LOG
 	stringstream ss;
-	ss << "Workday::plot_task(" << *_t << ")";
+	ss << "Workday::plot_task(" << *_t << ") into\n" << *this;
 	LOG (ss.str());
 	
 	// See if time is violated
@@ -35,27 +35,38 @@ tasklist *Workday::plottask(task *_t)
 			// Just shove this task into a list, and return it
 			bumpedtasks = new tasklist();
 			bumpedtasks -> push_back ( _t);
-			return bumpedtasks;
+			return NULL;
 		}
 
 		// Check if are actually able to insert the task
 		if ( (_t -> getTime() + numWorkMin) > maxworkmin ) // Not able
 		{
+			// Add back the tasks
 			for (int i = 0; i < bumpedtasks -> size(); i++)
 			{
 				tasks.push_back((*bumpedtasks)[i]);
 				numWorkMin += ((*bumpedtasks)[i]) -> getTime();
-				delete bumpedtasks;
-				return NULL;
-			}			
+			}
+		
+			delete bumpedtasks;
+
+			// Just shove this task into a list, and return it
+			bumpedtasks = new tasklist();
+			bumpedtasks -> push_back ( _t);
+			return bumpedtasks;			
 
 		}
 	}
 
+	// LOG
+	stringstream ss2;
+	ss2 << "Workday::plot_task Adding the task";
+	LOG (ss.str());
+
 	// At this point, guarenteed that there is room for the task, so add it
 	numWorkMin += _t -> getTime();
 	tasks.push_back(_t);	
-
+	
 	return bumpedtasks;
 }
 

@@ -56,6 +56,7 @@ public:
 
 	/*Attempts to add a task to this workday
 		t:: pointer to the task to be inserted
+		_wasplotted:: whether or not the task was plotted
 		RETURNS:: a list of tasks that need to be relocated*/
 	tasklist *plottask(task *_t);
 	

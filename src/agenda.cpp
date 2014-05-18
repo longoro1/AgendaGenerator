@@ -14,27 +14,108 @@ Agenda::~Agenda()
 
 void Agenda::plot_task (task *_t)
 {
-	// LOG
-	stringstream ss;
-	ss << "Agenda::plot_task(" << *_t << ")";
-	LOG (ss.str());
+	tasklist *tlist = new tasklist();
+	tlist -> push_back (_t);
 
-	Workday *w = getDay(_t -> getDate(), true);
-	w -> plottask(_t);
+	bool succeeded = plottask_helper(tlist);
+
+	if (!succeeded) cout << "All tasks do not fit in agenda" << endl;
 
 }
 
 void Agenda::plot_tasklist (tasklist *_tlist)
 {
-	taskiterator i_begin = _tlist -> begin();
-	taskiterator i_end = _tlist -> end();
+	bool succeeded = plottask_helper(_tlist);
+
+	if (!succeeded) cout << "All tasks do not fit in agenda" << endl;
+
+}
+
+bool Agenda::plottask_helper(tasklist *&_tasks)
+{
+	taskiterator i_begin = _tasks -> begin();
+	taskiterator i_end = _tasks -> end();	
 
 	while (i_begin != i_end)
 	{
-		plot_task ( *i_begin );
-		i_begin++;	
+		// Get the task
+		task *t = *i_begin;
+		i_begin++;
+
+		// Plot it
+		Workday *w = getDay(t -> getDate(), true);
+		tasklist *returnedvalues = w -> plottask(t);
+
+		if (returnedvalues != NULL)
+		{
+			bool succeeded = 
+				plottask_helper(returnedvalues, t -> getDate());
+			if (!succeeded) return false;
+		}
+	} 
+
+	return true;
+}
+
+bool Agenda::plottask_helper(tasklist *&_tasks, string _startdate)
+{	
+	string today = getDate();
+	string day = _startdate;
+
+	if (_tasks -> size () == 0) return true;
+
+	stringstream ss;
+	ss << "Plotting " << _tasks -> size() << " tasks on days betwen today (" 
+		<< today << ") and end day(" << day << ")" << endl
+		<< "Is day >= today?? " 
+		<< ((day >= today) ? "True\n" : "False\n");
+	LOG(ss.str());
+
+	while (day >= today) // Loop over every day from that date to today
+	{
+		stringstream ss;
+		ss << "\tPlotting " << _tasks -> size() << " tasks on " 
+			<< day << endl;
+		LOG(ss.str());
+
+		// Shift by -1
+		day = shiftDate(day, -1);
+		
+		taskiterator i_begin = _tasks -> begin();
+		taskiterator i_end = _tasks -> end();		
+		
+		if (i_begin == i_end) return true; // Finished
+
+		while (i_begin != i_end) // Try to insert every task in the list
+		{
+			// Plot it 
+			Workday *w = getDay(day, true);
+			tasklist *returnedvalues = 
+				w -> plottask(*i_begin);
+
+			// CASE:: Any tasks returned
+			if (returnedvalues != NULL)
+			{
+				bool succeeded = 
+					plottask_helper(returnedvalues, day);
+				if (!succeeded)
+				{
+					return false;
+				}
+
+				// Succeeded, realign pointers
+				_tasks -> erase(i_begin);
+				i_begin = _tasks -> begin();
+				i_begin--;
+				i_end = _tasks -> end();		
+		
+			}
+
+			i_begin++; // Advance iterator
+		}
 	}
 
+	return false;
 }
 
 

@@ -1,7 +1,7 @@
 #include "utilities.h"
 
 string logfilename = "log.txt";
-const bool canLOG = false;
+const bool canLOG = true;
 
 void LOG (string ss)
 {

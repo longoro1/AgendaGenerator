@@ -41,6 +41,18 @@ private:
 	// Minimum and maximum dates in the agenda
 	string minday, maxday;
 
+
+	/* Attempts to plot a list of tasks and modifies the local list
+		_tasks:: list of tasks to plot
+		RETURNS:: true if all tasks were plotted correctly*/
+	bool plottask_helper(tasklist *&_tasks);
+
+	/* Attempts to plot a list of tasks and modifies the local list
+		_tasks:: list of tasks to plot
+		_startdate:: Forces plotting to start 1 Day before this date
+		RETURNS:: true if all tasks were plotted correctly*/
+	bool plottask_helper(tasklist *&_tasks, string _startdate);
+
 public:
 	// Ctor
 	Agenda (string _name, int *_maxworkmin, int *_maxtasks);
