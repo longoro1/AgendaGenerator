@@ -23,6 +23,18 @@ void printhelp()
 	cout << "CSV FORMATTING: " 
 		<<"\"work,time,deadline,priority,partitions,details\"" << endl;
 
+	cout << endl << endl;
+	cout << "SPECIAL NOTES ***********************************************";
+	cout << endl;
+	cout << "DEADLINE - must be formatted as:: YY.MM.DD" << endl;
+	cout << "PRITORITY - a number from 5 - 0." << endl
+		<< "\t " << task::IMMDEDIATE_PRIORITY 
+			<< " Is a due immediately" << endl
+		<< "\t " << task::MAX_PRIORITY 
+			<< " Is highest, " << 
+			task::MIN_PRIORITY <<" is lowest" << endl
+		<< "\t Any other values will be changed to " 
+			<< task::MIN_PRIORITY << endl;
 
 	cout << endl << endl;
 }

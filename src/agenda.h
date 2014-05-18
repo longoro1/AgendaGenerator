@@ -8,6 +8,7 @@
 
 #include "workday.h"
 #include "fileparser.h"
+#include "utilities.h"
 
 using namespace std;
 
@@ -61,7 +62,11 @@ public:
 
 	/* Attempts to plot the task in the workday list
 		_t:: the task to plot*/
-	void plotTask (task *_t);
+	void plot_task (task *_t);
+
+	/* Attempts to plot the list of tasks in the workday list
+		_tlist:: the list of tasks to plot*/
+	void plot_tasklist (tasklist *_tlist);
 
 	// Printer
 	friend ostream& operator<<(ostream& os, Agenda &a);

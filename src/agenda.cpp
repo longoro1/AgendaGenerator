@@ -12,11 +12,29 @@ Agenda::~Agenda()
 	// Implement me!!
 }
 
-void Agenda::plotTask (task *_t)
+void Agenda::plot_task (task *_t)
 {
+	// LOG
+	string log;
+	log = "Agenda::plot_task(";
+	log += ")";;// << *_t << ")";
+	LOG (log);
 
 	Workday *w = getDay(_t -> getDate(), true);
 	w -> plottask(_t);
+
+}
+
+void Agenda::plot_tasklist (tasklist *_tlist)
+{
+	taskiterator i_begin = _tlist -> begin();
+	taskiterator i_end = _tlist -> end();
+
+	while (i_begin != i_end)
+	{
+		plot_task ( *i_begin );
+		i_begin++;	
+	}
 
 }
 

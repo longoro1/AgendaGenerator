@@ -48,24 +48,29 @@ void readFile(const string _filename, const string _subject,
 			<< _filename << "\"" << std::endl ;
 		return;
 	}
+	
+	// Create a list of tasks to plot
+	tasklist *tlist = new tasklist();
 
 	// Read until end of file
 	while(!file.eof() && i < maxtasks)
 	{
 		getline(file, base);
-	
+
 		// Allocate non-empty strings
 		if(!base.empty()) // Line must be non-empty
 		{
 			// Allocate a new daily task
 			task *t = generateTask(_subject, base); // Make new task
-			//Workday *w = _agenda -> getDay(t -> getDate(), true);
-			//w -> plottask(t);
-			_agenda -> plotTask(t);
-
+			tlist -> push_back (t);
+			
 			i++; // Increase counter
-		}
+		}		
 	}
+
+	// Plot the tasks into the agenda
+	_agenda -> plot_tasklist (tlist);
+	delete tlist; // Safe as it is just a list of ptrs
 
 
 	file.close();

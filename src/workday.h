@@ -8,6 +8,7 @@
 #include <cmath>
 
 #include "task.h"
+#include "utilities.h"
 
 using namespace std;
 
@@ -35,6 +36,11 @@ private:
 	// Maximum number of tasks that can be performed this day
 	int maxtasks;
 
+	/* Tries to bump all tasks that will make room for this task
+		t:: the task to bump
+		RETURNS:: a list of tasks to relocate or NULL*/
+	tasklist *bump(task *t);
+
 public: 
 	// Ctor
 	Workday(string _date, int _maxwork, int _maxtasks);
@@ -51,7 +57,7 @@ public:
 	/*Attempts to add a task to this workday
 		t:: pointer to the task to be inserted
 		RETURNS:: a list of tasks that need to be relocated*/
-	tasklist plottask(task *_t);
+	tasklist *plottask(task *_t);
 	
 	// Printer
 	friend ostream& operator<<(ostream& os, Workday &w);

@@ -4,10 +4,18 @@
 #include <string>
 #include <ostream>
 
+#include "utilities.h"
+
 using namespace std;
 
 /* This class is a container for any items relating to a daily task*/
 class task {
+
+public: // Task Constants
+	const static int MAX_PRIORITY = 1;
+	const static int MIN_PRIORITY = 5;
+	const static int IMMDEDIATE_PRIORITY = 0;
+	
 
 private:
 	// The subject that this task belongs to
@@ -42,6 +50,7 @@ public:
 
 	// Accessors
 	int getTime() const { return time; }
+	int getPriority() const { return priority; }
 	string getDate() const { return duedate; }
 
 	/*Partitions a task to divide the load

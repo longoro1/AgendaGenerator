@@ -1,9 +1,9 @@
 work,time,deadline,priority,partitions,details
-Ch. 1,20,14.4.6,3,1,Hello World
-Ch. 2,30,14.4.6,3,1,
+Ch. 1,20,14.4.2,3,1,Hello World
+Ch. 2,30,14.4.2,3,1,
 Ch. 3,30,14.4.2,0,1,
-Ch. 5,40,14.4.3,3,2,Study crazy!!
-Ch. 6,60,14.1.12,3,3,
-Ch. 9,10,14.8.9,3,1,Easy chapter :)
-Ch. 10,60,14.7.25,0,5,
-Ch. 11,80,15.8.12,3,3,
+Ch. 5,40,14.4.2,3,2,Study crazy!!
+Ch. 6,60,14.4.2,3,3,
+Ch. 9,10,14.4.2,3,1,Easy chapter :)
+Ch. 10,60,14.4.2,0,5,
+Ch. 11,80,14.4.2,100,3,MY PRIORITY SHOULD BE CHANGED!!!!!!
