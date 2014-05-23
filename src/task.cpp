@@ -8,6 +8,9 @@ task::task(string _subject, string _name, int _time, int _partitions,
 	name = _name;
 	time = _time;
 	remainingPartitions = _partitions;
+	if (priority == IMMDEDIATE_PRIORITY)
+		remainingPartitions = 1;
+	
 	priority = (_priority >= IMMDEDIATE_PRIORITY 
 				&& _priority <= MIN_PRIORITY) 
 		? _priority : MIN_PRIORITY; // Within limit

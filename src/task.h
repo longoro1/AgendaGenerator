@@ -50,6 +50,7 @@ public:
 
 	// Accessors
 	string getName() const { return name; }
+	int getPartitions()  const { return remainingPartitions; }
 	int getTime() const { return time; }
 	int getPriority() const { return priority; }
 	string getDate() const { return duedate; }

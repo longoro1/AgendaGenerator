@@ -62,7 +62,8 @@ void readFile(const string _filename, const string _subject,
 		{
 			// Allocate a new daily task
 			task *t = generateTask(_subject, base); // Make new task
-			tlist -> push_back (t);
+			for (int i = 0; i < t -> getPartitions() ; i++)			
+				tlist -> push_back (t);
 			
 			i++; // Increase counter
 		}		
