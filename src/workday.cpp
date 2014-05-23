@@ -25,6 +25,16 @@ tasklist *Workday::plottask(task *_t)
 	ss << "Workday::plot_task(" << _t -> getName() << " " << _t -> getTime() << ") into " << date << endl;
 	LOG (ss.str());
 	
+	// First, check if task exists already
+	if (findMatch(*_t))
+	{
+		// Just shove this task into a list, and return it
+		bumpedtasks = new tasklist();
+		bumpedtasks -> push_back ( _t);
+		return bumpedtasks;
+	}
+
+
 	// See if time is violated
 	if ( (_t -> getTime() + numWorkMin) > maxworkmin )
 	{	
@@ -142,6 +152,22 @@ tasklist *Workday::bump(task *t)
 	}
 
 	return tlist;
+}
+
+
+bool Workday::findMatch (const task &_t)
+{
+	taskiterator i_begin = begin();
+	taskiterator i_end = end();
+
+	while (i_begin != i_end)
+	{
+		if (*(*i_begin) == _t) return true;		
+
+		i_begin++;
+	}
+
+	return false;
 }
 
 ostream &operator<<(ostream &os, Workday &w)

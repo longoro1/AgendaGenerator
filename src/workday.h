@@ -41,6 +41,11 @@ private:
 		RETURNS:: a list of tasks to relocate or NULL*/
 	tasklist *bump(task *t);
 
+	/* Tries for find a task in the list
+		_t:: the task
+		RETURNS:: true if they are the same*/
+	bool findMatch (const task &_t);
+
 public: 
 	// Ctor
 	Workday(string _date, int _maxwork, int _maxtasks);

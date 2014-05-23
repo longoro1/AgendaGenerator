@@ -55,6 +55,9 @@ public:
 	int getPriority() const { return priority; }
 	string getDate() const { return duedate; }
 	
+	// Operator
+	bool operator== (const task &_t);
+
 	// Printer
 	friend ostream& operator<<(ostream& os, const task &t);
 
