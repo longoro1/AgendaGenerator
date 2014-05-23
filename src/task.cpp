@@ -29,21 +29,6 @@ task::task(const task &_t, const int _newTaskTime)
 	duedate = _t.duedate;
 }
 
-task *task::partition(int _newTaskTime)
-{
-	// Trying to take away too much time
-	if (_newTaskTime > this -> time) return NULL;
-
-	// Reduce the time
-	this -> time -= _newTaskTime;
-
-	// Create the new task
-	task *t = new task(*this, _newTaskTime);
-
-	return t; 
-	
-}
-
 ostream &operator<<(ostream &os, const task &t)
 {
 	// Print off the task

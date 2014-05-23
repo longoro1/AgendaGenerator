@@ -53,12 +53,6 @@ public:
 	int getTime() const { return time; }
 	int getPriority() const { return priority; }
 	string getDate() const { return duedate; }
-
-	/*Partitions a task to divide the load
-		_newTaskTime:: amount of time to allocate to the new task
-		RETURNS:: pointer to a new task class, 
-			or null if an error occured*/
-	task *partition(int _newTaskTime);
 	
 	// Printer
 	friend ostream& operator<<(ostream& os, const task &t);

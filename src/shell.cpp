@@ -35,6 +35,7 @@ void printhelp()
 			task::MIN_PRIORITY <<" is lowest" << endl
 		<< "\t Any other values will be changed to " 
 			<< task::MIN_PRIORITY << endl;
+	cout << "TIME:: Max amount of time per a partition" << endl;
 
 	cout << endl << endl;
 }
