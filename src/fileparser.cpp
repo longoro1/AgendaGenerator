@@ -111,26 +111,24 @@ string shiftDate(const string _date, const int _numDays)
 	int day, month, year;
 
 	sscanf(_date.c_str(), "%d.%d.%d", &year, &month, &day);
-	day--;
 
-	/*// Create a time struct
-	struct tm t;
-	t.tm_year = year - 1900 + 2000;
-	t.tm_mon = month - 1;
-	t.tm_mday = day;
+	// Create init tm struct
+	tm init = {0, 0, 0, 
+			(day + _numDays),
+			(month - 1),
+			(year + 2000 - 1900) };
 
-	// Offset the number of days
-	t.tm_mday += _numDays;
-	time_t next = mktime(&t);
+	// Make the time struct
+	time_t time_intermed = mktime (&init);
 
-	// Output the new days
-	year = t.tm_year + 1900;
-	month = t.tm_mon + 1;
-	day = t.tm_mday;*/
+	// Spit out new time
+	tm const *t = localtime (& time_intermed);
 
 	// Store the new day
 	stringstream ss;
-	ss << year << "." << month << "." << day << endl;
+	ss << (t -> tm_year + 1900 - 2000) 
+		<< "." << (t -> tm_mon + 1) 
+		<< "." << t -> tm_mday << endl;
 
 	// Return the result
 	return ss.str();

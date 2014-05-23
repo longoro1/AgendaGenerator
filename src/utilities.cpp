@@ -1,6 +1,6 @@
 #include "utilities.h"
 
-string logfilename = "log.txt";
+const string logfilename = "log.txt";
 const bool canLOG = true;
 
 void LOG (string ss)
