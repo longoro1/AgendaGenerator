@@ -49,6 +49,7 @@ public:
 		string _duedate, int _priority, string _description);
 
 	// Accessors
+	string getName() const { return name; }
 	int getTime() const { return time; }
 	int getPriority() const { return priority; }
 	string getDate() const { return duedate; }

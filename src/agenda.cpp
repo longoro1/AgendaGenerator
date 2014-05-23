@@ -41,6 +41,9 @@ bool Agenda::plottask_helper(tasklist *&_tasks)
 		// Get the task
 		task *t = *i_begin;
 		i_begin++;
+		stringstream ss;
+		ss << "Agenda::plottask_helper(" << t -> getName() << " " << t -> getTime() << ")" << endl;
+		LOG(ss.str());
 
 		// Plot it
 		Workday *w = getDay(t -> getDate(), true);
@@ -68,7 +71,7 @@ bool Agenda::plottask_helper(tasklist *&_tasks, string _startdate)
 	ss << "Plotting " << _tasks -> size() << " tasks on days betwen today (" 
 		<< today << ") and end day(" << day << ")" << endl
 		<< "Is day >= today?? " 
-		<< ((day >= today) ? "True\n" : "False\n");
+		<< ((day >= today) ? "True" : "False");
 	LOG(ss.str());
 
 	while (day >= today) // Loop over every day from that date to today
@@ -83,8 +86,6 @@ bool Agenda::plottask_helper(tasklist *&_tasks, string _startdate)
 		
 		taskiterator i_begin = _tasks -> begin();
 		taskiterator i_end = _tasks -> end();		
-		
-		if (i_begin == i_end) return true; // Finished
 
 		while (i_begin != i_end) // Try to insert every task in the list
 		{
@@ -112,6 +113,7 @@ bool Agenda::plottask_helper(tasklist *&_tasks, string _startdate)
 			}
 
 			i_begin++; // Advance iterator
+			if (i_begin == i_end) return true; // Finished
 		}
 	}
 
@@ -132,13 +134,17 @@ Workday *Agenda::createDay(string _date, workdayiterator _posn)
 	if (workdays.size() == 0) workdays.push_back(day);
 	else workdays.insert (_posn, day);
 
-
 	// Get the min and max date
 	workdayiterator i_begin = begin();
 	workdayiterator i_end = end();
 	minday = (*i_begin) -> getDate();
 	i_end--;
 	maxday = (*i_end) -> getDate();
+
+
+	stringstream ss;
+	ss << "Agenda::createDay(" << _date << " max min:" << maxworkmin[workdayindex] << ")" << endl; ///////////////////////////////////////////////
+	LOG(ss.str());
 
 	// Return the pointer
 	return day;
@@ -164,6 +170,10 @@ Workday *Agenda::getDay(string _date, bool _canAdd)
 	
 	// Not allowed to add the workday
 	if (!_canAdd) return NULL; 
+
+	stringstream ss;
+	ss << "Agenda::getDay(" << _date << ")" << endl; ///////////////////////////////////////////////
+	LOG(ss.str());
 
 	// Workday doesn't exist, create it
 	return createDay(_date, i_begin);
